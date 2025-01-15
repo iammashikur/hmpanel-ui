@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Dashboard</title>
+
+    <!-- Google Fonts: Rajdhani -->
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- ApexCharts -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    <style>
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="min-h-screen bg-gray-50 p-6">
+        <div class="max-w-7xl mx-auto space-y-6">
+            <!-- Header -->
+            <div class="flex justify-between items-center">
+                <h1 class="text-3xl font-bold text-gray-900">Server Dashboard</h1>
+                <div class="flex items-center gap-2">
+                    <button class="flex items-center gap-2 px-4 py-2 bg-green-100 rounded-lg hover:bg-gray-200">
+                        <i data-lucide="play"></i>
+                        Start
+                    </button>
+                    <button class="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200">
+                        <i data-lucide="power"></i>
+                        Reboot
+                    </button>
+                </div>
+            </div>
+
+            <!-- Server Information and Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                <!-- Server Info Card -->
+                <div class="bg-white rounded-lg shadow-sm p-6 space-y-4">
+                    <h2 class="text-xl font-semibold border-b pb-2">Server Information</h2>
+                    <div id="serverInfo" class="space-y-2">
+                        <!-- Server info will be inserted here -->
+                    </div>
+                </div>
+
+                <!-- CPU Chart -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h2 class="text-xl font-semibold mb-4">CPU Usage</h2>
+                    <div id="cpuChart"></div>
+                </div>
+
+                <!-- RAM Chart -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h2 class="text-xl font-semibold mb-4">RAM Usage</h2>
+                    <div id="ramChart"></div>
+                </div>
+
+                <!-- Disk Space Chart -->
+                <div class="bg-white rounded-lg shadow-sm p-6">
+                    <h2 class="text-xl font-semibold mb-4">Disk Space</h2>
+                    <div id="diskSpaceChart"></div>
+                </div>
+            </div>
+
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+
+                <!-- Start Server Button -->
+                <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+                    <button id="toggleServer"
+                        class="w-full bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2">
+                        <i data-lucide="play"></i>
+                        <span>Start Server</span>
+                    </button>
+                </div>
+
+                <!-- phpMyAdmin Button -->
+                <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+                    <button
+                        class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg flex items-center justify-center gap-2">
+                        <i data-lucide="database"></i>
+                        phpMyAdmin
+                    </button>
+                </div>
+
+                <!-- Configure Button -->
+                <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+                    <button
+                        class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg flex items-center justify-center gap-2">
+                        <i data-lucide="settings"></i>
+                        Configure
+                    </button>
+                </div>
+
+                <!-- Terminal Button -->
+                <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+                    <button
+                        class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg flex items-center justify-center gap-2">
+                        <i data-lucide="terminal"></i>
+                        Terminal
+                    </button>
+                </div>
+
+                <!-- File Manager Button -->
+                <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+                    <button
+                        class="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2">
+                        <i data-lucide="folder"></i>
+                        File Manager
+                    </button>
+                </div>
+
+                <!-- Domain Manager Button -->
+                <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+                    <button
+                        class="w-full bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2">
+                        <i data-lucide="globe"></i>
+                        Domain Manager
+                    </button>
+                </div>
+
+                <!-- DNS Manager Button -->
+                <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+                    <button
+                        class="w-full bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2">
+                        <i data-lucide="cloud"></i>
+                        DNS Manager
+                    </button>
+                </div>
+
+                <!-- Backup Button -->
+                <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+                    <button
+                        class="w-full bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2">
+                        <i data-lucide="save"></i>
+                        Backup
+                    </button>
+                </div>
+
+                <!-- Logs Button -->
+                <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+                    <button
+                        class="w-full bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2">
+                        <i data-lucide="clipboard"></i>
+                        Logs
+                    </button>
+                </div>
+
+                <!-- Security Button -->
+                <div class="bg-white rounded-lg shadow-sm p-4 mb-6">
+                    <button
+                        class="w-full bg-red-100 hover:bg-red-200 text-gray-700 px-4 py-2 rounded-lg flex items-center justify-center gap-2">
+                        <i data-lucide="shield"></i>
+                        Security
+                    </button>
+                </div>
+
+            </div>
+
+
+
+            <!-- System Services -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-2xl font-semibold border-b pb-4 mb-6 text-gray-800">System Services</h2>
+                <div id="services" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                    <!-- Services will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Websites Section -->
+            <div class="bg-white rounded-lg shadow-sm">
+                <div class="p-4 border-b flex justify-between items-center">
+                    <h2 class="text-xl font-semibold">Websites</h2>
+                    <button id="addWebsiteBtn"
+                        class="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                        <i data-lucide="plus"></i>
+                        Add Website
+                    </button>
+                </div>
+
+                <div id="websitesList" class="divide-y">
+                    <!-- Websites will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Server Information
+        const serverInfo = {
+            name: 'Production Server 01',
+            ip: '192.168.1.100',
+            provider: 'Digital Ocean',
+            location: 'New York, USA',
+            buildVersion: '202112181',
+        };
+
+        // Services Status
+        const services = [{
+                name: 'nginx',
+                status: 'running'
+            },
+            {
+                name: 'PHP-FPM',
+                status: 'running'
+            },
+            {
+                name: 'MySQL',
+                status: 'running'
+            },
+            {
+                name: 'Redis',
+                status: 'running'
+            },
+            {
+                name: 'Supervisor',
+                status: 'running'
+            }
+        ];
+
+        // Render server information
+        function renderServerInfo() {
+            const container = document.getElementById('serverInfo');
+            container.innerHTML = Object.entries(serverInfo)
+                .map(([key, value]) => `
+                    <div class="flex justify-between">
+                        <span class="text-gray-600">${key.replace(/([A-Z])/g, ' $1').trim()}:</span>
+                        <span class="font-medium">${value}</span>
+                    </div>
+                `).join('');
+        }
+
+        // Render services
+        function renderServices() {
+            const container = document.getElementById('services');
+            container.innerHTML = services
+                .map(service => `
+            <div class="bg-white p-5 border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all duration-300">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="font-semibold text-lg text-gray-700">${service.name}</span>
+                    <span class="h-2 w-2 rounded-full ${service.status === 'running' ? 'bg-green-500' : 'bg-red-500'}"></span>
+                </div>
+                <button class="w-full px-4 py-2 text-sm text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-md flex items-center justify-center gap-2 transition-colors duration-300">
+                    <i data-lucide="refresh-cw"></i>
+                    <span>Restart</span>
+                </button>
+            </div>
+        `).join('');
+            lucide.createIcons();
+        }
+
+
+        // Render websites
+        function renderWebsites() {
+            const container = document.getElementById('websitesList');
+            container.innerHTML = `
+                <div class="p-4 flex items-center justify-between hover:bg-gray-50">
+                    <div class="flex items-center gap-4">
+                        <span class="h-3 w-3 rounded-full bg-green-500"></span>
+                        <span class="font-medium">Project 1</span>
+                        <span class="text-sm text-gray-500">PHP 8.2</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button class="p-2 hover:bg-gray-100 rounded-lg">
+                            <i data-lucide="play"></i>
+                        </button>
+                        <button class="p-2 hover:bg-gray-100 rounded-lg">
+                            <i data-lucide="folder"></i>
+                        </button>
+                        <button class="p-2 hover:bg-gray-100 rounded-lg">
+                            <i data-lucide="database"></i>
+                        </button>
+                        <button class="p-2 hover:bg-gray-100 rounded-lg">
+                            <i data-lucide="edit"></i>
+                        </button>
+                        <button class="p-2 hover:bg-gray-100 rounded-lg">
+                            <i data-lucide="trash-2"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        // Initialize Charts
+        function initializeCharts() {
+            const chartOptions = {
+                chart: {
+                    type: 'line',
+                    height: 150,
+                    animations: {
+                        enabled: true,
+                        easing: 'linear',
+                    },
+                    toolbar: {
+                        show: false
+                    },
+                    zoom: {
+                        enabled: false
+                    }
+                },
+                stroke: {
+                    curve: 'smooth',
+                    width: 2
+                },
+                markers: {
+                    size: 0
+                },
+                tooltip: {
+                    theme: 'light'
+                },
+                grid: {
+                    borderColor: '#f1f1f1'
+                },
+                xaxis: {
+                    type: 'datetime',
+                    labels: {
+                        datetimeFormatter: {
+                            hour: 'HH:mm:ss'
+                        }
+                    }
+                },
+                yaxis: {
+                    max: 100,
+                    min: 0,
+                    labels: {
+                        formatter: (val) => `${val.toFixed(0)}%`
+                    }
+                }
+            };
+
+            const cpuChart = new ApexCharts(document.querySelector("#cpuChart"), {
+                ...chartOptions,
+                series: [{
+                    name: 'CPU',
+                    data: []
+                }]
+            });
+
+            const ramChart = new ApexCharts(document.querySelector("#ramChart"), {
+                ...chartOptions,
+                series: [{
+                    name: 'RAM',
+                    data: []
+                }]
+            });
+
+            const diskSpaceChart = new ApexCharts(document.querySelector("#diskSpaceChart"), {
+                ...chartOptions,
+                series: [{
+                    name: 'Disk Space',
+                    data: []
+                }]
+            });
+
+            cpuChart.render();
+            ramChart.render();
+            diskSpaceChart.render();
+
+            // Update charts
+            setInterval(() => {
+                const time = new Date().getTime();
+                cpuChart.appendData([{
+                    data: [{
+                        x: time,
+                        y: Math.floor(Math.random() * 60) + 20
+                    }]
+                }]);
+                ramChart.appendData([{
+                    data: [{
+                        x: time,
+                        y: Math.floor(Math.random() * 40) + 30
+                    }]
+                }]);
+                diskSpaceChart.appendData([{
+                    data: [{
+                        x: time,
+                        y: Math.floor(Math.random() * 40) + 50
+                    }]
+                }]);
+            }, 1000);
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', () => {
+            renderServerInfo();
+            renderServices();
+            renderWebsites();
+            initializeCharts();
+
+            // Add Website button handler
+            document.getElementById('addWebsiteBtn').addEventListener('click', () => {
+                alert('Add Website functionality would go here');
+            });
+        });
+    </script>
+</body>
+
+</html>
